@@ -4,9 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Depra.StateMachines.Domain;
+using Depra.StateMachines.Abstract;
 
-namespace Depra.StateMachines.Application
+namespace Depra.StateMachines.Transition
 {
     public sealed class StateTransition : IStateTransition
     {

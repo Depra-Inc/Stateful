@@ -6,4 +6,8 @@
         <RootNamespace>Depra.StateMachines</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Hierarchical" />
+    </ItemGroup>
+
 </Project>

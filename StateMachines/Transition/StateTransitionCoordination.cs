@@ -1,44 +1,29 @@
-﻿// Copyright © 2022-2023 Nikolay Melnikov. All rights reserved.
-// SPDX-License-Identifier: Apache-2.0
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Depra.StateMachines.Domain;
+using Depra.StateMachines.Abstract;
 
-namespace Depra.StateMachines.Application
+namespace Depra.StateMachines.Transition
 {
-    public sealed class StatefulTransitionMachine : IStatefulTransitionMachine
+    public sealed class StateTransitionCoordination : IStateTransitionCoordination
     {
         private static readonly IList<IStateTransition> EMPTY_TRANSITIONS = new List<IStateTransition>();
-
-        private readonly IStateMachine _stateMachine;
+        
         private readonly IList<IStateTransition> _anyTransitions;
         private readonly IDictionary<Type, IList<IStateTransition>> _transitions;
-
+        
         private IList<IStateTransition> _currentTransitions;
 
-        public event Action<IState> StateChanged;
-
-        public StatefulTransitionMachine(IStateMachine stateMachine)
+        public StateTransitionCoordination()
         {
             _anyTransitions = new List<IStateTransition>();
             _currentTransitions = new List<IStateTransition>();
             _transitions = new Dictionary<Type, IList<IStateTransition>>();
-
-            _stateMachine = stateMachine ?? throw new ArgumentNullException(nameof(stateMachine));
-            _stateMachine.StateChanged += OnStateChanged;
         }
-
-        public IState CurrentState => _stateMachine.CurrentState;
-
-        public void ChangeState(IState state) => _stateMachine.ChangeState(state);
-
-        public void Tick()
+        
+        public void Update(IState state)
         {
-            if (NeedTransition(out var nextState))
-            {
-                ChangeState(nextState);
-            }
+            _transitions.TryGetValue(state.GetType(), out _currentTransitions);
+            _currentTransitions ??= EMPTY_TRANSITIONS;
         }
 
         public bool NeedTransition(out IState nextState)
@@ -71,7 +56,6 @@ namespace Depra.StateMachines.Application
         public void AddTransition(IState from, IStateTransition transition)
         {
             var sourceStateType = from.GetType();
-
             if (_transitions.TryGetValue(sourceStateType, out var transitions) == false)
             {
                 transitions = new List<IStateTransition>();
@@ -79,18 +63,6 @@ namespace Depra.StateMachines.Application
             }
 
             transitions.Add(transition);
-        }
-
-        private void OnStateChanged(IState state)
-        {
-            FetchCurrentTransitions();
-            StateChanged?.Invoke(state);
-        }
-
-        private void FetchCurrentTransitions()
-        {
-            _transitions.TryGetValue(CurrentState.GetType(), out _currentTransitions);
-            _currentTransitions ??= EMPTY_TRANSITIONS;
         }
     }
 }

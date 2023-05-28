@@ -1,9 +1,12 @@
 ﻿// Copyright © 2022-2023 Nikolay Melnikov. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-namespace Depra.StateMachines.UnitTests;
+using Depra.StateMachines.Abstract;
+using Depra.StateMachines.Transition;
 
-public sealed class StatefulTransitionMachineTests
+namespace Depra.StateMachines.UnitTests.Transition;
+
+public sealed class StatefulTransitionSystemTests
 {
     [Fact]
     public void ChangeState_SetsCurrentState()
@@ -12,13 +15,13 @@ public sealed class StatefulTransitionMachineTests
         var newState = Substitute.For<IState>();
         var stateMachine = Substitute.For<IStateMachine>();
         stateMachine.CurrentState.Returns(newState);
-        IStatefulTransitionMachine statefulTransitionMachine = new StatefulTransitionMachine(stateMachine);
+        IStatefulTransitionSystem statefulTransitionSystem = new StatefulTransitionSystem(stateMachine);
 
         // Act.
-        statefulTransitionMachine.ChangeState(newState);
+        statefulTransitionSystem.ChangeState(newState);
 
         // Assert.
-        statefulTransitionMachine.CurrentState.Should().BeEquivalentTo(newState);
+        statefulTransitionSystem.CurrentState.Should().BeEquivalentTo(newState);
     }
 
     [Fact]
@@ -28,10 +31,10 @@ public sealed class StatefulTransitionMachineTests
         var stateMachine = Substitute.For<IStateMachine>();
         var currentState = Substitute.For<IState>();
         stateMachine.CurrentState.Returns(currentState);
-        IStatefulTransitionMachine statefulTransitionMachine = new StatefulTransitionMachine(stateMachine);
+        IStatefulTransitionSystem statefulTransitionSystem = new StatefulTransitionSystem(stateMachine);
 
         // Act.
-        statefulTransitionMachine.Tick();
+        statefulTransitionSystem.Tick();
 
         // Assert.
         stateMachine.DidNotReceive().ChangeState(Arg.Any<IState>());
@@ -47,11 +50,11 @@ public sealed class StatefulTransitionMachineTests
         transition.NextState.Returns(nextState);
 
         var stateMachine = Substitute.For<IStateMachine>();
-        IStatefulTransitionMachine statefulTransitionMachine = new StatefulTransitionMachine(stateMachine);
-        statefulTransitionMachine.AddAnyTransition(transition);
+        IStatefulTransitionSystem statefulTransitionSystem = new StatefulTransitionSystem(stateMachine);
+        statefulTransitionSystem.AddAnyTransition(transition);
 
         // Act.
-        var result = statefulTransitionMachine.NeedTransition(out var actualNextState);
+        var result = statefulTransitionSystem.NeedTransition(out var actualNextState);
 
         // Assert.
         result.Should().BeTrue();
@@ -69,8 +72,8 @@ public sealed class StatefulTransitionMachineTests
         transition.NextState.Returns(nextState);
 
         var stateMachine = Substitute.For<IStateMachine>();
-        IStatefulTransitionMachine statefulTransitionMachine = new StatefulTransitionMachine(stateMachine);
-        statefulTransitionMachine.AddTransition(currentState, transition);
+        IStatefulTransitionSystem statefulTransitionSystem = new StatefulTransitionSystem(stateMachine);
+        statefulTransitionSystem.AddTransition(currentState, transition);
         stateMachine.When(x => x.ChangeState(Arg.Any<IState>()))
             .Do(info =>
             {
@@ -79,8 +82,8 @@ public sealed class StatefulTransitionMachineTests
             });
 
         // Act.
-        statefulTransitionMachine.ChangeState(nextState);
-        var result = statefulTransitionMachine.NeedTransition(out var actualNextState);
+        statefulTransitionSystem.ChangeState(nextState);
+        var result = statefulTransitionSystem.NeedTransition(out var actualNextState);
 
         // Assert.
         result.Should().BeTrue();
@@ -92,7 +95,7 @@ public sealed class StatefulTransitionMachineTests
     {
         // Arrange.
         var stateMachine = Substitute.For<IStateMachine>();
-        var transitionStateMachine = new StatefulTransitionMachine(stateMachine);
+        var transitionStateMachine = new StatefulTransitionSystem(stateMachine);
 
         // Act.
         var result = transitionStateMachine.NeedTransition(out var nextState);
@@ -109,7 +112,7 @@ public sealed class StatefulTransitionMachineTests
         IStateMachine stateMachine = null!;
 
         // Act.
-        var act = () => new StatefulTransitionMachine(stateMachine);
+        var act = () => new StatefulTransitionSystem(stateMachine);
 
         // Assert.
         act.Should().Throw<ArgumentNullException>();

@@ -4,8 +4,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
-using Depra.StateMachines.Application;
-using Depra.StateMachines.Domain;
+using Depra.StateMachines.Abstract;
+using Depra.StateMachines.Transition;
 
 namespace Depra.StateMachines.Benchmarks
 {

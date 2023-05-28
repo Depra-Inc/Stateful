@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System;
-using Depra.StateMachines.Domain;
+using Depra.StateMachines.Abstract;
 
-namespace Depra.StateMachines.Application
+namespace Depra.StateMachines.Finite
 {
     public sealed class StateMachine : IStateMachine
     {

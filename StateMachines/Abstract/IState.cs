@@ -1,10 +1,12 @@
 // Copyright © 2022-2023 Nikolay Melnikov. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-namespace Depra.StateMachines.Domain
+namespace Depra.StateMachines.Abstract
 {
-    public interface IStateTransitionCondition
+    public interface IState
     {
-        bool IsMet();
+        void Enter();
+
+        void Exit();
     }
 }

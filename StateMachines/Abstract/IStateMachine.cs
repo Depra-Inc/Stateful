@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Depra.StateMachines.Domain
+namespace Depra.StateMachines.Abstract
 {
     public interface IStateMachine
     {
