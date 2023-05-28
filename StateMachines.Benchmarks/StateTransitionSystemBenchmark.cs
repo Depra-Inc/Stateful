@@ -19,9 +19,9 @@ namespace Depra.StateMachines.Benchmarks
             var secondState = new SecondState();
             var finiteStateMachine = new StateMachine();
             var transitionCoordination = new StateTransitionCoordination();
+            transitionCoordination.AddTransition(firstState, new StateTransition(secondState, () => true));
+            transitionCoordination.AddTransition(secondState, new StateTransition(firstState, () => true));
             _system = new StatefulTransitionSystem(finiteStateMachine, transitionCoordination);
-            _system.AddTransition(firstState, new StateTransition(secondState, () => true));
-            _system.AddTransition(secondState, new StateTransition(firstState, () => true));
         }
 
         [Benchmark]

@@ -32,20 +32,11 @@ namespace Depra.StateMachines.Transition
 
         public void Tick()
         {
-            if (NeedTransition(out var nextState))
+            if (_coordination.NeedTransition(out var nextState))
             {
                 ChangeState(nextState);
             }
         }
-
-        public bool NeedTransition(out IState nextState) =>
-            _coordination.NeedTransition(out nextState);
-
-        public void AddAnyTransition(IStateTransition transition) =>
-            _coordination.AddAnyTransition(transition);
-
-        public void AddTransition(IState from, IStateTransition transition) =>
-            _coordination.AddTransition(from, transition);
 
         private void OnStateChanged(IState state)
         {

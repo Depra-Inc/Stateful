@@ -8,11 +8,5 @@ namespace Depra.StateMachines.Transition
     public interface IStatefulTransitionSystem : IStateMachine
     {
         void Tick();
-        
-        bool NeedTransition(out IState nextState);
-
-        void AddAnyTransition(IStateTransition transition);
-        
-        void AddTransition(IState from, IStateTransition transition);
     }
 }
