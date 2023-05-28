@@ -8,7 +8,7 @@ using Depra.StateMachines.Transition;
 
 namespace Depra.StateMachines.Benchmarks
 {
-    public class TransitionStateMachineBenchmark
+    public class StateTransitionSystemBenchmark
     {
         private IStatefulTransitionSystem _system = null!;
 
@@ -17,7 +17,9 @@ namespace Depra.StateMachines.Benchmarks
         {
             var firstState = new FirstState();
             var secondState = new SecondState();
-            _system = new StatefulTransitionSystem(new StateMachine());
+            var finiteStateMachine = new StateMachine();
+            var transitionCoordination = new StateTransitionCoordination();
+            _system = new StatefulTransitionSystem(finiteStateMachine, transitionCoordination);
             _system.AddTransition(firstState, new StateTransition(secondState, () => true));
             _system.AddTransition(secondState, new StateTransition(firstState, () => true));
         }
