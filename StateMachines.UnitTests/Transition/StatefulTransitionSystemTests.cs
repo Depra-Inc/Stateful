@@ -9,29 +9,46 @@ namespace Depra.StateMachines.UnitTests.Transition;
 public sealed class StatefulTransitionSystemTests
 {
     [Fact]
-    public void ChangeState_SetsCurrentState()
+    public void ChangeState_Should_UpdateCurrentState()
     {
         // Arrange.
         var newState = Substitute.For<IState>();
         var stateMachine = Substitute.For<IStateMachine>();
         stateMachine.CurrentState.Returns(newState);
-        IStatefulTransitionSystem statefulTransitionSystem = new StatefulTransitionSystem(stateMachine);
+        var coordination = Substitute.For<IStateTransitionCoordination>();
+        IStatefulTransitionSystem transitionSystem = new StatefulTransitionSystem(stateMachine, coordination);
 
         // Act.
-        statefulTransitionSystem.ChangeState(newState);
+        transitionSystem.ChangeState(newState);
 
         // Assert.
-        statefulTransitionSystem.CurrentState.Should().BeEquivalentTo(newState);
+        transitionSystem.CurrentState.Should().BeEquivalentTo(newState);
     }
 
     [Fact]
-    public void Tick_NoTransitionNeeded_DoesNotChangeState()
+    public void Tick_WhenNeedTransition_Should_ChangeState()
     {
         // Arrange.
         var stateMachine = Substitute.For<IStateMachine>();
-        var currentState = Substitute.For<IState>();
-        stateMachine.CurrentState.Returns(currentState);
-        IStatefulTransitionSystem statefulTransitionSystem = new StatefulTransitionSystem(stateMachine);
+        var coordination = Substitute.For<IStateTransitionCoordination>();
+        coordination.NeedTransition(out var nextState).Returns(true);
+        var transitionSystem = new StatefulTransitionSystem(stateMachine, coordination);
+
+        // Act.
+        transitionSystem.Tick();
+
+        // Assert.
+        stateMachine.Received(1).ChangeState(nextState);
+    }
+
+    [Fact]
+    public void Tick_WhenNoTransitionNeeded_Should_NotChangeState()
+    {
+        // Arrange.
+        var stateMachine = Substitute.For<IStateMachine>();
+        var coordination = Substitute.For<IStateTransitionCoordination>();
+        IStatefulTransitionSystem statefulTransitionSystem = new StatefulTransitionSystem(stateMachine, coordination);
+        coordination.NeedTransition(out _).Returns(false);
 
         // Act.
         statefulTransitionSystem.Tick();
@@ -50,11 +67,18 @@ public sealed class StatefulTransitionSystemTests
         transition.NextState.Returns(nextState);
 
         var stateMachine = Substitute.For<IStateMachine>();
-        IStatefulTransitionSystem statefulTransitionSystem = new StatefulTransitionSystem(stateMachine);
-        statefulTransitionSystem.AddAnyTransition(transition);
+        var coordination = Substitute.For<IStateTransitionCoordination>();
+        IStatefulTransitionSystem transitionSystem = new StatefulTransitionSystem(stateMachine, coordination);
+        transitionSystem.AddAnyTransition(transition);
+        coordination.NeedTransition(out Arg.Any<IState>())
+            .Returns(x =>
+            {
+                x[0] = nextState;
+                return true;
+            });
 
         // Act.
-        var result = statefulTransitionSystem.NeedTransition(out var actualNextState);
+        var result = transitionSystem.NeedTransition(out var actualNextState);
 
         // Assert.
         result.Should().BeTrue();
@@ -72,18 +96,18 @@ public sealed class StatefulTransitionSystemTests
         transition.NextState.Returns(nextState);
 
         var stateMachine = Substitute.For<IStateMachine>();
-        IStatefulTransitionSystem statefulTransitionSystem = new StatefulTransitionSystem(stateMachine);
-        statefulTransitionSystem.AddTransition(currentState, transition);
-        stateMachine.When(x => x.ChangeState(Arg.Any<IState>()))
-            .Do(info =>
+        var coordination = Substitute.For<IStateTransitionCoordination>();
+        IStatefulTransitionSystem transitionSystem = new StatefulTransitionSystem(stateMachine, coordination);
+        transitionSystem.AddTransition(currentState, transition);
+        coordination.NeedTransition(out Arg.Any<IState>())
+            .Returns(x =>
             {
-                var newState = info.Arg<IState>();
-                stateMachine.StateChanged += Raise.Event<Action<IState>>(newState);
+                x[0] = nextState;
+                return true;
             });
 
         // Act.
-        statefulTransitionSystem.ChangeState(nextState);
-        var result = statefulTransitionSystem.NeedTransition(out var actualNextState);
+        var result = transitionSystem.NeedTransition(out var actualNextState);
 
         // Assert.
         result.Should().BeTrue();
@@ -95,10 +119,11 @@ public sealed class StatefulTransitionSystemTests
     {
         // Arrange.
         var stateMachine = Substitute.For<IStateMachine>();
-        var transitionStateMachine = new StatefulTransitionSystem(stateMachine);
+        var coordination = Substitute.For<IStateTransitionCoordination>();
+        var transitionSystem = new StatefulTransitionSystem(stateMachine, coordination);
 
         // Act.
-        var result = transitionStateMachine.NeedTransition(out var nextState);
+        var result = transitionSystem.NeedTransition(out var nextState);
 
         // Assert.
         result.Should().BeFalse();
@@ -110,9 +135,24 @@ public sealed class StatefulTransitionSystemTests
     {
         // Arrange.
         IStateMachine stateMachine = null!;
+        var coordination = Substitute.For<IStateTransitionCoordination>();
 
         // Act.
-        var act = () => new StatefulTransitionSystem(stateMachine);
+        var act = () => new StatefulTransitionSystem(stateMachine, coordination);
+
+        // Assert.
+        act.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Constructor_NullTransitionCoordinator_ThrowsArgumentNullException()
+    {
+        // Arrange.
+        var stateMachine = Substitute.For<IStateMachine>();
+        IStateTransitionCoordination coordination = null!;
+
+        // Act.
+        var act = () => new StatefulTransitionSystem(stateMachine, coordination);
 
         // Assert.
         act.Should().Throw<ArgumentNullException>();
