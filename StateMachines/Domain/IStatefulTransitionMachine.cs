@@ -3,7 +3,7 @@
 
 namespace Depra.StateMachines.Domain
 {
-    public interface ITransitionStateMachine : IStateMachine
+    public interface IStatefulTransitionMachine : IStateMachine
     {
         void Tick();
         

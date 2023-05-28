@@ -7,24 +7,24 @@ using Depra.StateMachines.Domain;
 
 namespace Depra.StateMachines.Application
 {
-    public sealed class TransitionStateMachine : ITransitionStateMachine
+    public sealed class StatefulTransitionMachine : IStatefulTransitionMachine
     {
-        private static readonly List<IStateTransition> EMPTY_TRANSITIONS = new List<IStateTransition>();
-        
+        private static readonly IList<IStateTransition> EMPTY_TRANSITIONS = new List<IStateTransition>();
+
         private readonly IStateMachine _stateMachine;
-        private readonly List<IStateTransition> _anyTransitions;
-        private readonly Dictionary<Type, List<IStateTransition>> _transitions;
-        
-        private List<IStateTransition> _currentTransitions;
+        private readonly IList<IStateTransition> _anyTransitions;
+        private readonly IDictionary<Type, IList<IStateTransition>> _transitions;
+
+        private IList<IStateTransition> _currentTransitions;
 
         public event Action<IState> StateChanged;
 
-        public TransitionStateMachine(IStateMachine stateMachine)
+        public StatefulTransitionMachine(IStateMachine stateMachine)
         {
             _anyTransitions = new List<IStateTransition>();
             _currentTransitions = new List<IStateTransition>();
-            _transitions = new Dictionary<Type, List<IStateTransition>>();
-            
+            _transitions = new Dictionary<Type, IList<IStateTransition>>();
+
             _stateMachine = stateMachine ?? throw new ArgumentNullException(nameof(stateMachine));
             _stateMachine.StateChanged += OnStateChanged;
         }
@@ -65,7 +65,7 @@ namespace Depra.StateMachines.Application
             return false;
         }
 
-        public void AddAnyTransition(IStateTransition transition) => 
+        public void AddAnyTransition(IStateTransition transition) =>
             _anyTransitions.Add(transition);
 
         public void AddTransition(IState from, IStateTransition transition)
