@@ -5,12 +5,14 @@ using System;
 
 namespace Depra.StateMachines.Abstract
 {
-    public interface IStateMachine
+    public interface IStateMachine : IStateMachine<IState> { }
+
+    public interface IStateMachine<TState>
     {
         event Action<IState> StateChanged;
-        
-        IState CurrentState { get; }
 
-        void ChangeState(IState state);
+        TState CurrentState { get; }
+
+        void SwitchState(TState to);
     }
 }

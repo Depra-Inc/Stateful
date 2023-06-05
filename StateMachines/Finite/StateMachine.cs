@@ -16,19 +16,19 @@ namespace Depra.StateMachines.Finite
             _allowReentry = allowReentry;
 
         public StateMachine(IState startingState, bool allowReentry = false) : this(allowReentry) =>
-            ChangeState(startingState);
+            SwitchState(startingState);
 
         public IState CurrentState { get; private set; }
 
-        public void ChangeState(IState state)
+        public void SwitchState(IState to)
         {
-            if (CanEnterState(state) == false)
+            if (CanEnterState(to) == false)
             {
                 return;
             }
 
             CurrentState?.Exit();
-            CurrentState = state;
+            CurrentState = to;
             CurrentState?.Enter();
 
             StateChanged?.Invoke(CurrentState);

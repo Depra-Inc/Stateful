@@ -27,14 +27,14 @@ namespace Depra.StateMachines.Transition
         public IState CurrentState => 
             _stateMachine.CurrentState;
 
-        public void ChangeState(IState state) =>
-            _stateMachine.ChangeState(state);
+        public void SwitchState(IState to) =>
+            _stateMachine.SwitchState(to);
 
         public void Tick()
         {
             if (_coordination.NeedTransition(out var nextState))
             {
-                ChangeState(nextState);
+                SwitchState(nextState);
             }
         }
 

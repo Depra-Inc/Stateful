@@ -19,7 +19,7 @@ public sealed class StatefulTransitionSystemTests
         IStatefulTransitionSystem transitionSystem = new StatefulTransitionSystem(stateMachine, coordination);
 
         // Act.
-        transitionSystem.ChangeState(newState);
+        transitionSystem.SwitchState(to: newState);
 
         // Assert.
         transitionSystem.CurrentState.Should().BeEquivalentTo(newState);
@@ -38,7 +38,7 @@ public sealed class StatefulTransitionSystemTests
         transitionSystem.Tick();
 
         // Assert.
-        stateMachine.Received(1).ChangeState(nextState);
+        stateMachine.Received(1).SwitchState(nextState);
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public sealed class StatefulTransitionSystemTests
         statefulTransitionSystem.Tick();
 
         // Assert.
-        stateMachine.DidNotReceive().ChangeState(Arg.Any<IState>());
+        stateMachine.DidNotReceive().SwitchState(to: Arg.Any<IState>());
     }
 
     [Fact]

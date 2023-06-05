@@ -29,7 +29,7 @@ public sealed class StateMachineTests
         var stateMachine = new StateMachine();
 
         // Act.
-        stateMachine.ChangeState(newState);
+        stateMachine.SwitchState(to: newState);
 
         // Assert.
         stateMachine.CurrentState.Should().BeEquivalentTo(newState);
@@ -45,7 +45,7 @@ public sealed class StateMachineTests
         stateMachine.StateChanged += _ => { stateChangedEventInvoked = true; };
 
         // Act.
-        stateMachine.ChangeState(newState);
+        stateMachine.SwitchState(to: newState);
 
         // Assert.
         stateChangedEventInvoked.Should().BeTrue();
