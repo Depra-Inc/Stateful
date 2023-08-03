@@ -3,6 +3,7 @@
 
 using System;
 using Depra.StateMachines.Abstract;
+using Depra.StateMachines.TimeBased;
 
 namespace Depra.StateMachines.Transition
 {
@@ -30,7 +31,7 @@ namespace Depra.StateMachines.Transition
         public void SwitchState(IState to) =>
             _stateMachine.SwitchState(to);
 
-        public void Tick()
+        void ITickableStateMachine.Tick()
         {
             if (_coordination.NeedTransition(out var nextState))
             {

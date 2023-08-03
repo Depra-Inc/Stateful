@@ -3,9 +3,9 @@
     <PropertyGroup>
         <AssemblyName>Depra.StateMachines.Benchmarks</AssemblyName>
         <RootNamespace>Depra.StateMachines.Benchmarks</RootNamespace>
-        <TargetFrameworks>net7.0;netcoreapp3.1</TargetFrameworks>
-        <LangVersion>9</LangVersion>
+        <LangVersion>11</LangVersion>
         <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>

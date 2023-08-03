@@ -9,17 +9,14 @@ using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
 using BenchmarkDotNet.Validators;
 
-namespace Depra.StateMachines.Benchmarks
+namespace Depra.StateMachines.Benchmarks;
+
+public static class Program
 {
-    public static class Program
-    {
-        private static void Main()
-        {
-            BenchmarkRunner.Run(typeof(Program).Assembly, DefaultConfig.Instance
-                .AddValidator(JitOptimizationsValidator.FailOnError)
-                .AddJob(Job.Default.WithToolchain(InProcessNoEmitToolchain.Instance))
-                .AddDiagnoser(new MemoryDiagnoser(new MemoryDiagnoserConfig()))
-                .WithOrderer(new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest)));
-        }
-    }
+	private static void Main() =>
+		BenchmarkRunner.Run(typeof(Program).Assembly, DefaultConfig.Instance
+			.AddValidator(JitOptimizationsValidator.FailOnError)
+			.AddJob(Job.Default.WithToolchain(InProcessNoEmitToolchain.Instance))
+			.AddDiagnoser(new MemoryDiagnoser(new MemoryDiagnoserConfig()))
+			.WithOrderer(new DefaultOrderer(SummaryOrderPolicy.FastestToSlowest)));
 }
