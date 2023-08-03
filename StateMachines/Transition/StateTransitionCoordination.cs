@@ -5,7 +5,7 @@ using Depra.StateMachines.Abstract;
 
 namespace Depra.StateMachines.Transition
 {
-	public sealed class StateTransitionCoordination : IStateTransitionCoordination
+	public sealed partial class StateTransitionCoordination : IStateTransitionCoordination
 	{
 		private static readonly List<IStateTransition> EMPTY_TRANSITIONS = new();
 
@@ -22,8 +22,7 @@ namespace Depra.StateMachines.Transition
 
 		bool IStateTransitionCoordination.NeedTransition(out IState nextState)
 		{
-			var transitions = _anyTransitions.Concat(_currentTransitions);
-			foreach (var transition in transitions)
+			foreach (var transition in _anyTransitions.Concat(_currentTransitions))
 			{
 				if (transition.ShouldTransition() == false)
 				{

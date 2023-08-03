@@ -9,7 +9,7 @@
         <IsTestProject>true</IsTestProject>
         <AssemblyName>Depra.StateMachines.UnitTests</AssemblyName>
         <RootNamespace>Depra.StateMachines.UnitTests</RootNamespace>
-        <LangVersion>12</LangVersion>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

@@ -8,7 +8,7 @@ using Depra.StateMachines.Abstract;
 
 namespace Depra.StateMachines.Transition
 {
-    public sealed class StateTransition : IStateTransition
+    public sealed partial class StateTransition : IStateTransition
     {
         private readonly Func<bool>[] _conditions;
 
@@ -30,7 +30,7 @@ namespace Depra.StateMachines.Transition
 
         public IState NextState { get; }
 
-        public bool ShouldTransition() =>
+        bool IStateTransition.ShouldTransition() =>
             _conditions.All(condition => condition());
     }
 }
