@@ -146,6 +146,9 @@ _TeamCity*
 *.coverage
 *.coveragexml
 
+# Obsidian settings
+.obsidian
+
 # NCrunch
 _NCrunch_*
 .*crunch*.local.xml
