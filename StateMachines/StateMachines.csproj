@@ -16,6 +16,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <PackageProjectUrl>https://github.com/Depression-aggression</PackageProjectUrl>
+        <LangVersion>9</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

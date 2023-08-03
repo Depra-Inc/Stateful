@@ -24,7 +24,7 @@ namespace Depra.StateMachines.Transition
         public void Dispose() =>
             _stateMachine.StateChanged -= OnStateChanged;
 
-        public IState CurrentState => 
+        IState IStateMachine<IState>.CurrentState =>
             _stateMachine.CurrentState;
 
         public void SwitchState(IState to) =>

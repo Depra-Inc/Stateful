@@ -1,22 +1,17 @@
-﻿using Depra.StateMachines.Abstract;
-using Depra.StateMachines.Transition;
+﻿using Depra.StateMachines.Transition;
 
 namespace Depra.StateMachines.UnitTests.Transition;
 
 public sealed class StateTransitionCoordinationTests
 {
-    private readonly IStateTransitionCoordination _coordination;
+    private readonly IStateTransitionCoordination _coordination = new StateTransitionCoordination();
 
-    public StateTransitionCoordinationTests() => 
-        _coordination = new StateTransitionCoordination();
-    
     [Fact]
     public void NeedTransition_Should_ReturnTrue_WhenAnyTransitionExists()
     {
         // Arrange.
         var nextState = Substitute.For<IState>();
         var transition = Substitute.For<IStateTransition>();
-
         _coordination.AddAnyTransition(transition);
         transition.ShouldTransition().Returns(true);
         transition.NextState.Returns(nextState);
@@ -36,7 +31,6 @@ public sealed class StateTransitionCoordinationTests
         var state = Substitute.For<IState>();
         var nextState = Substitute.For<IState>();
         var transition = Substitute.For<IStateTransition>();
-
         _coordination.AddTransition(state, transition);
         transition.ShouldTransition().Returns(true);
         transition.NextState.Returns(nextState);

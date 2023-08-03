@@ -12,7 +12,7 @@ namespace Depra.StateMachines.Benchmarks
         private const int ANY_TRANSITIONS_COUNT = 100;
         private const int CURRENT_TRANSITIONS_COUNT = 100;
 
-        private StateTransitionCoordination _standardCoordination = null!;
+        private IStateTransitionCoordination _standardCoordination = null!;
         private StateTransitionCoordinationZeroAlloc _zeroAllocCoordination = null!;
 
         [GlobalSetup]

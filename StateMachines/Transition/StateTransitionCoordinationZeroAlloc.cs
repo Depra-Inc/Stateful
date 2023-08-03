@@ -6,20 +6,13 @@ namespace Depra.StateMachines.Transition
 {
     public sealed class StateTransitionCoordinationZeroAlloc : IStateTransitionCoordination
     {
-        private static readonly List<IStateTransition> EMPTY_TRANSITIONS = new List<IStateTransition>();
+        private static readonly List<IStateTransition> EMPTY_TRANSITIONS = new();
         
-        private readonly List<IStateTransition> _anyTransitions;
-        private readonly Dictionary<Type, List<IStateTransition>> _transitions;
+        private readonly List<IStateTransition> _anyTransitions = new();
+        private readonly Dictionary<Type, List<IStateTransition>> _transitions = new();
         
-        private List<IStateTransition> _currentTransitions;
+        private List<IStateTransition> _currentTransitions = new();
 
-        public StateTransitionCoordinationZeroAlloc()
-        {
-            _anyTransitions = new List<IStateTransition>();
-            _currentTransitions = new List<IStateTransition>();
-            _transitions = new Dictionary<Type, List<IStateTransition>>();
-        }
-        
         public void Update(IState state)
         {
             _transitions.TryGetValue(state.GetType(), out _currentTransitions);
