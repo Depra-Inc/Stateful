@@ -2,15 +2,21 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4000F894-A1E5-4376-B9DB-55D8F5F05636}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateMachines", "StateMachines\StateMachines.csproj", "{40614A0F-E27B-40EF-B0D1-04357A906C6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Depra.StateMachines", "Depra.StateMachines\Depra.StateMachines.csproj", "{40614A0F-E27B-40EF-B0D1-04357A906C6B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2AF6F93C-E096-450C-87E6-294BF8B9DD54}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{3C7A2697-E2D0-4BA4-95B3-010EDDAFA336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateMachines.UnitTests", "StateMachines.UnitTests\StateMachines.UnitTests.csproj", "{BB6F09AB-5727-4C41-8DCB-988BF590713E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Depra.StateMachines.UnitTests", "Depra.StateMachines.UnitTests\Depra.StateMachines.UnitTests.csproj", "{BB6F09AB-5727-4C41-8DCB-988BF590713E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateMachines.Benchmarks", "StateMachines.Benchmarks\StateMachines.Benchmarks.csproj", "{7FDB84E4-4B19-4DD0-B114-C0D38D8EAAC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Depra.StateMachines.Benchmarks", "Depra.StateMachines.Benchmarks\Depra.StateMachines.Benchmarks.csproj", "{7FDB84E4-4B19-4DD0-B114-C0D38D8EAAC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Depra.Behavior", "Depra.Behavior\Depra.Behavior.csproj", "{2105A6A9-EE7C-4A34-8C9B-BFDB7E77E773}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Depra.StateMachines.Extensions", "Depra.StateMachines.Extensions\Depra.StateMachines.Extensions.csproj", "{F7FE7ACC-60BE-4B90-8154-4674EB831F2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Depra.StateMachines.Promises", "Depra.StateMachines.Promises\Depra.StateMachines.Promises.csproj", "{81090E03-E169-4851-BF80-EE038BA7D54B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,9 @@ Global
 		{40614A0F-E27B-40EF-B0D1-04357A906C6B} = {4000F894-A1E5-4376-B9DB-55D8F5F05636}
 		{BB6F09AB-5727-4C41-8DCB-988BF590713E} = {2AF6F93C-E096-450C-87E6-294BF8B9DD54}
 		{7FDB84E4-4B19-4DD0-B114-C0D38D8EAAC3} = {3C7A2697-E2D0-4BA4-95B3-010EDDAFA336}
+		{2105A6A9-EE7C-4A34-8C9B-BFDB7E77E773} = {4000F894-A1E5-4376-B9DB-55D8F5F05636}
+		{F7FE7ACC-60BE-4B90-8154-4674EB831F2F} = {4000F894-A1E5-4376-B9DB-55D8F5F05636}
+		{81090E03-E169-4851-BF80-EE038BA7D54B} = {4000F894-A1E5-4376-B9DB-55D8F5F05636}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{40614A0F-E27B-40EF-B0D1-04357A906C6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -35,5 +44,17 @@ Global
 		{7FDB84E4-4B19-4DD0-B114-C0D38D8EAAC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FDB84E4-4B19-4DD0-B114-C0D38D8EAAC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FDB84E4-4B19-4DD0-B114-C0D38D8EAAC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2105A6A9-EE7C-4A34-8C9B-BFDB7E77E773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2105A6A9-EE7C-4A34-8C9B-BFDB7E77E773}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2105A6A9-EE7C-4A34-8C9B-BFDB7E77E773}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2105A6A9-EE7C-4A34-8C9B-BFDB7E77E773}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7FE7ACC-60BE-4B90-8154-4674EB831F2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7FE7ACC-60BE-4B90-8154-4674EB831F2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7FE7ACC-60BE-4B90-8154-4674EB831F2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7FE7ACC-60BE-4B90-8154-4674EB831F2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81090E03-E169-4851-BF80-EE038BA7D54B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81090E03-E169-4851-BF80-EE038BA7D54B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81090E03-E169-4851-BF80-EE038BA7D54B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81090E03-E169-4851-BF80-EE038BA7D54B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
