@@ -1,257 +1,169 @@
-Легкий конечный автомат:
-* Поддерживает переходы условий;
-* Может использоваться для любого объекта;
-* Потрясающая производительность.
+## Оглавление
 
-## Navigation
+<details>
+<summary>Навигация</summary>
 
-* [Установка](#installation)
-* [How to use](#how-to-use)
-  * [Implementing StateMachine](#1-implement-statemachinetinitializer-field-or-property)
-  * [Creating some states](#2-create-some-states)
-  * [Installing states in your class](#3-install-states-in-your-class)
-  * [Adding states to the StateMachine](#4-add-states-to-the-statemachine)
-  * [Binding transitions for states](#5-bind-transitions-for-states)
-  * [Launching the StateMachine](#6-launch-the-statemachine)
-  * [Result](#what-should-be-the-result)
-  * [Disable Transitions](#disable-transitions)
-  
+* [О проекте](#о-проекте)
+* [Установка](#установка)
+* [Как использовать](#как-использовать)
+    * [Реализуйте поле или свойство](#1-реализуйте-поле-или-свойство-istatemachinetstate)
+    * [Определите состояния](#2-определите-состояния)
+    * [Установите состояния в своем классе](#3-установите-состояния-в-своем-классе)
+    * [Привяжите переходы между состояниями](#4-привяжите-переходы-между-состояниями)
+    * [Запустите систему переходов](#5-запустите-statefultransitionsystem)
+
+</details>
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Введение
+
+`Stateful` - это проект, который предоставляет простую реализацию конечного автомата для использования .Net и Unity.
+Конечные автоматы являются мощным инструментом для управления поведением объектов, состояниями и переходами между ними.
+
+### Особенности:
+
+* Поддержка переходов по условиям: Вы можете определить условия, при выполнении которых объект будет переходить между
+  состояниями.
+* Простое использование: Проект предоставляет простой `API` для определения состояний и их переходов, что делает его
+  легким в использовании даже для новичков.
+* Производительность: Реализация конечного автомата оптимизирована для высокой производительности, что делает его
+  подходящим для использования в реальных проектах `Unity`.
+
+### Содержание:
+
+| Категория      | Описание                                                                                                                            |
+|----------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| `Abstract`     | В этой папке находится `API` проекта, включающее интерфейсы `IState` и `IStateMachine`.                                             |
+| `Finite`       | В этой папке содержится простая реализация конечного автомата, предоставляющая базовую функциональность для управления состояниями. |
+| `Transitional` | В этой папке расположен конечный автомат с поддержкой переходов по условиям.                                                        |
+
 ## Установка
 
-Добавьте файлы .dll из последнего релиза в свой проект Unity.
+Добавьте файлы .dll из последнего релиза в свой проект `Unity`.
 
 ## Как использовать
 
-### 1. Implement `StateMachine<TInitializer>` field or property
+### 1. Реализуйте поле или свойство `IStateMachine<TState>`
 
-`TInitializer` is the class to which the states will belong
+`TState` - некое состояние. Может быть любым типом, но реализация `StateMachine` работает с `IState`.
 
 ```csharp
-public readonly StateMachine<Sample> StateMachine = new StateMachine<Sample>();
-```
-```csharp
-public StateMachine<Sample> StateMachine { get; } = new StateMachine<Sample>();
+public readonly IStateMachine<Sample> _stateMachine = new StateMachine<Sample>();
 ```
 
-### 2. Create some states
+```csharp
+public IStateMachine<Sample> StateMachine { get; } = new StateMachine<Sample>();
+```
 
-Create some states for an entity. In states you can override methods you need: `OnEnter()`, `OnRun()`, `OnExit()`.
+### 2. Определите состояния
 
-| Method | Info |
-| ------ | ---- |
-| `OnEnter()` | Called once upon entering the state |
-| `OnRun()` | Execution is determined by update methods |
-| `OnExit()` | Called once when exiting the state |
+Создайте состояния для объекта. В состояниях можно переопределить нужные вам методы: `Enter()`, `Exit()`.
 
-For example, let's create two states:
+| Метод     | Описание                                    |
+|-----------|---------------------------------------------|
+| `Enter()` | Вызывается один раз при входе в состояние   |
+| `Exit()`  | Вызывается один раз при выходе из состояния |
 
-`AwaitingState` is necessary to wait for the entity of some condition
+Например, создадим два состояния:
 
-You also need to pass an `TInitializer` to the base State constructor. In this case, the initializer is the `Sample`
+`AwaitingState` - состояние для ожидания какого-то условия.
 
 ```csharp
-public class AwaitingState : State<Sample>
+public sealed class AwaitingState : IState
 {
-    private IFollower Follower { get; }
+    private readonly IFollower _follower;
     
-    public AwaitingState(IFollower follower, Sample sample) : base(sample)
-    {
-        Follower = follower;
-    }
-        
-    public override void OnEnter()
-    {
-        Follower.StopFollow();
-    }
+    public AwaitingState(IFollower follower) => _follower = follower;
+    
+    void IState.Enter() => _follower.StopFollow();
 }
 ```
 
-`FollowingState` is necessary for the entity to follow some target
+`FollowingState` - состояние для следования за какой-то целью.
 
 ```csharp
-public class FollowingState : State<Sample>
+public sealed class FollowingState : IState
 {
-    private IFollower Follower { get; }
-    private Transform Target { get; }
+    private readonly Transform _target;
+    private readonly IFollower _follower;
         
-    public FollowingState(IFollower follower, Transform target, Sample sample) : base(sample)
+    public FollowingState(Transform target, IFollower follower)
     {
-        Follower = follower;
-        Target = target;
+        _target = target;
+        _follower = follower;
     }
 
-    public override void OnRun()
-    {
-        Follower.Follow(Target);
-    }
+    IState.Enter() => _follower.StartFollow(_target);
+    
+    IState.Exit() => _follower.StopFollow();
 }
 ```
 
-### 3. Install states in your class
+### 3. Установите состояния в своем классе
 
 ```csharp
 [RequireComponent(typeof(IFollower))]
-public class Sample : MonoBehaviour
+internal sealed class Sample : MonoBehaviour
 {
-    [SerializeField] private Health health;
+    [SerializedField] private Transform _target;
     
-    public StateMachine<Sample> StateMachine { get; } = new StateMachine<Sample>();
-    public Transform Target { get; set; }
-
-    private AwaitingState _awaitingState;
-    private FollowingState _followingState;
+    private IStateMachine _stateMachine;
     
-    private void Awake()
-    {
-        InstallStates();
-    }
+    private void Awake() => InstallStates();
 
     private void InstallStates()
     {
         var follower = GetComponent<IFollower>();
-
-        _awaitingState = new AwaitingState(follower, this);
-        _followingState = new FollowingState(follower, Target, this);
+        var awaitingState = new AwaitingState(follower);
+        _stateMachine = new StateMachine(startingState: awaitingState, allowReentry: false);
     }
 }
 ```
 
-### 4. Add states to the StateMachine
+Аргументы `startingState` и `allowReentry` необязательны.
+Вы можете использовать конструктор по умолчанию,
+тогда вы должны будете установить состояние в `StateMachine` с помощью метода `SwitchState`.
 
-You can add states with a method or a constructor
+### 4. Привяжите переходы между состояниями
 
-```csharp
-StateMachine.AddStates(_awaitingState, _followingState);
-```
-```csharp
-StateMachine = new StateMachine<Sample>(_awaitingState, _followingState);
-```
+Мы можем добавить переходы между состояниями.
+Для этого подойдут `StatefulTransitionSystem` и `IStateTransitions`.
+C помощью методов `Add`, `AddAny`, а также методов расширения `At` и `AnyAt`, вы можете добавлять переходы.
 
-You can only add states to the StateMachine once!
+| Метод                                                        | Описание                                                                |
+|--------------------------------------------------------------|-------------------------------------------------------------------------|
+| `Add(IState from, IStateTransition transition)`              | Принимает исходное состояние и переход                                  |
+| `AddAny(IStateTransition transition)`                        | Принимает переход между состояниями                                     |
+| `At(IState from, IState to, params Func<bool>[] conditions)` | Принимает исходное состояние, конечное состояние и условия для перехода |
+| `AnyAt(IState to, params Func<bool>[] conditions)`           | Принимает конечное состояние и условия перехода                         |
 
-### 5. Bind transitions for states
+Давайте представим ситуацию:
 
-We have methods for binding transitions such as `AddTransition` and `AddAnyTransition`.
+Мы хотим переключиться из состояния `AwaitingState` в состояние `FollowingState`, если цель найдена.
+Также мы хотим переключиться обратно в состояние `AwaitingState`, если цель потеряна.
+Метод `AddTransition` поможет нам в этом, давайте добавим два перехода:
 
-| Method | Info |
-| ------ | ---- |
-| `AddTransition<TStateFrom, TStateTo>(Func<bool> condition)` | Takes two states as arguments, from which state we want to go to the second state and the transition condition |
-| `AddAnyTransition<TStateTo>(Func<bool> condition)` | Takes as arguments the one state we want to switch to and the transition condition |
-
-Let's imagine a situation:
-
-We want to switch from the `AwatingState` to the `FollowingState` if a target is found. We also want to switch back to the `AwaitingState` if the target is lost. `AddTransition` method will help us with this, let's add two transitions:
-
-From `AwaitingState` to `FollowingState`
+Из состояния `AwaitingState` в состояние `FollowingState`
 
 ```csharp
-StateMachine.AddTransition<AwaitingState, FollowingState>(condition: () => Target != null);
+transitions.Add(from: _awaitingState,
+    new StateTransition(to: _followingState, condition: () => _target != null));
 ```
 
-From `FollowingState` to `AwaitingState`
+Также доступно такое расширение:
 
 ```csharp
-StateMachine.AddTransition<FollowingState, AwaitingState>(condition: () => Target == null);
+transitions.At(from: _awaitingState, to: _followingState, () => _target != null);
 ```
 
-We will also add a transition to the `AwaitingState` from any state.
-Why might this be needed? If the entity is not alive, then it is logical that it will not be able to move and will have to switch to the idle state.
+Мы добавили переход из состояния `AwaitingState` в состояние `FollowingState` с условием, что цель не равна `null`.
+Почему это нужно? 
+Если цель равна `null`, то логично, что мы можем переключиться в состояние `FollowingState`.
 
-Add transition from any state to idle `AwaitingState`
+### 5. Запустите StatefulTransitionSystem
 
-```csharp
-StateMachine.AddAnyTransition<AwaitingState>(condition: () => health.IsAlive == false);
-```
-
-### 6. Launch the StateMachine
-
-For the launch of `StateMachine` you need to set first state and call the `Run()` method in `Update()`:
+Для запуска `StatefulTransitionSystem` вам нужно установить первое состояние и вызвать метод `Tick()` в `Update()`:
 
 ```csharp
-
-private void Start()
-{
-    StateMachine.SetState<AwaitingState>();
-}
-
-private void Update()
-{
-    StateMachine.Run();
-}
-```
-
-### What should be the result
-
-```csharp
-using NTC.ContextStateMachine;
-using UnityEngine;
-
-[RequireComponent(typeof(IFollower))]
-public class Sample : MonoBehaviour
-{
-    [SerializeField] private Health health;
-
-    public StateMachine<Sample> StateMachine { get; } = new StateMachine<Sample>();
-    public Transform Target { get; set; }
-
-    private AwaitingState _awaitingState;
-    private FollowingState _followingState;
-    
-    private void Awake()
-    {
-        InstallStates();
-        
-        BindTransitions();
-        
-        BindAnyTransitions();
-        
-        StateMachine.SetState<AwaitingState>();
-    }
-    
-    private void InstallStates()
-    {
-        var follower = GetComponent<IFollower>();
-    
-        _awaitingState = new AwaitingState(follower, this);
-        _followingState = new FollowingState(follower, Target, this);
-    
-        StateMachine.AddStates(_awaitingState, _followingState);
-    }
-    
-    private void BindTransitions()
-    {
-        StateMachine.AddTransition<AwaitingState, FollowingState>(condition: () => Target != null);
-        StateMachine.AddTransition<FollowingState, AwaitingState>(condition: () => Target == null);
-    }
-    
-    private void BindAnyTransitions()
-    {
-        StateMachine.AddAnyTransition<AwaitingState>(condition: () => health.IsAlive == false);
-    }
-    
-    private void Update()
-    {
-        StateMachine.Run();
-    }
-}
-```
-
-### Disable Transitions
-
-If you want to set states manually, you can disable `TransitionsEnabled` in the `StateMachine`:
-
-```csharp
-StateMachine.TransitionsEnabled = false;
-```
-
-Then you can change state of `StateMachine` by method `SetState<TState>()`:
-
-```csharp
-StateMachine.SetState<TState>();
-```
-
-Also if you don't want the `StateMachine` to choose the state in the update method, you can use the method `SetStateByTransitions()` when you need:
-
-```csharp
-StateMachine.SetStateByTransitions();
+private void Update() => _transitionSystem.Tick();
 ```
