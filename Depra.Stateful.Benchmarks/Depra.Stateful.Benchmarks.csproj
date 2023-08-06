@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <LangVersion>11</LangVersion>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <PackageId>Depra.Stateful.Benchmarks</PackageId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="BenchmarkDotNet" Version="0.13.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Depra.Stateful\Depra.Stateful.csproj" />
+      <ProjectReference Include="..\StateMachines\StateMachines.csproj" />
+    </ItemGroup>
+
+</Project>
