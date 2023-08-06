@@ -3,12 +3,12 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
         <Authors>Nikolay Melnikov</Authors>
-        <Version>0.0.1</Version>
+        <Version>0.0.2</Version>
         <Company>Depra</Company>
         <Description>Provides interfaces and implementations for various types of state machines.</Description>
         <Copyright>Copyright © 2022-2023 Nikolay Melnikov. All rights reserved.</Copyright>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <RepositoryUrl>https://github.com/Depression-aggression/StateMachines</RepositoryUrl>
+        <RepositoryUrl>https://github.com/Depression-aggression/Stateful</RepositoryUrl>
         <RepositoryType>Module</RepositoryType>
         <PackageTags>State, Machine, Finite, Hierarchical, Transitions, FSM, HFSM, AFSM</PackageTags>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
