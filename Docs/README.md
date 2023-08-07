@@ -206,7 +206,7 @@ out [my portfolio](https://github.com/Depression-aggression) and [reach out](mai
 
 ## License
 
-Apache-2.0
+**Apache-2.0**
 
 Copyright (c) 2022-2023 Nikolay Melnikov
 [g0dzZz1lla@yandex.ru](mailto:g0dzZz1lla@yandex.ru)
