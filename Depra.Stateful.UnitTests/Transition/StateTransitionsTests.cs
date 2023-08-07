@@ -81,15 +81,15 @@ public sealed class StateTransitionsTests
 	[Fact]
 	public void Add_ShouldAddTransition_ToSpecifiedStateList()
 	{
-		// Arrange
+		// Arrange.
 		var stateTransitions = new StateTransitions();
 		var initialState = Substitute.For<IState>();
 		var transition = Substitute.For<IStateTransition>();
 
-		// Act
+		// Act.
 		stateTransitions.Add(initialState, transition);
 
-		// Assert
+		// Assert.
 		stateTransitions.NeedTransition(initialState, out _);
 		transition.Received(1).ShouldTransition();
 	}
