@@ -1,5 +1,5 @@
-// Copyright © 2022-2023 Nikolay Melnikov. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
+// © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
 
 using System.Runtime.CompilerServices;
 using Depra.Stateful.Abstract;
@@ -12,8 +12,7 @@ namespace Depra.Stateful.Finite
 
 		public event StateChangedDelegate StateChanged;
 
-		public StateMachine(bool allowReentry = false) =>
-			_allowReentry = allowReentry;
+		public StateMachine(bool allowReentry = false) => _allowReentry = allowReentry;
 
 		public StateMachine(IState startingState, bool allowReentry = false) : this(allowReentry) =>
 			SwitchState(startingState);
@@ -35,7 +34,6 @@ namespace Depra.Stateful.Finite
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private bool CanEnterState(IState state) =>
-			_allowReentry || CurrentState != state;
+		private bool CanEnterState(IState state) => _allowReentry || CurrentState != state;
 	}
 }

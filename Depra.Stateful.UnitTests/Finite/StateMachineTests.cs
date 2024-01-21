@@ -1,5 +1,5 @@
-// Copyright © 2022-2023 Nikolay Melnikov. All rights reserved.
 // SPDX-License-Identifier: Apache-2.0
+// © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
 
 using Depra.Stateful.Finite;
 
@@ -10,43 +10,43 @@ public sealed class StateMachineTests
     [Fact]
     public void AutoTransitionOnStart_SetsCurrentState()
     {
-        // Arrange.
+        // Arrange:
         var startState = Substitute.For<IState>();
         var stateMachine = new StateMachine(startState);
 
         // Act - No action needed.
 
-        // Assert.
+        // Assert:
         stateMachine.CurrentState.Should().BeEquivalentTo(startState);
     }
 
     [Fact]
     public void ChangeState_SetsCurrentState()
     {
-        // Arrange.
+        // Arrange:
         var newState = Substitute.For<IState>();
         var stateMachine = new StateMachine();
 
-        // Act.
+        // Act:
         stateMachine.SwitchState(to: newState);
 
-        // Assert.
+        // Assert:
         stateMachine.CurrentState.Should().BeEquivalentTo(newState);
     }
 
     [Fact]
     public void ChangeState_InvokesStateChangedEvent()
     {
-        // Arrange.
+        // Arrange:
         var newState = Substitute.For<IState>();
         var stateChangedEventInvoked = false;
         var stateMachine = new StateMachine();
         stateMachine.StateChanged += _ => { stateChangedEventInvoked = true; };
 
-        // Act.
+        // Act:
         stateMachine.SwitchState(to: newState);
 
-        // Assert.
+        // Assert:
         stateChangedEventInvoked.Should().BeTrue();
     }
 }

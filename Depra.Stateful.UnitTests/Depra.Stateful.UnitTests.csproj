@@ -28,7 +28,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Depra.Stateful\Depra.Stateful.csproj" />
-      <ProjectReference Include="..\StateMachines\StateMachines.csproj" />
     </ItemGroup>
 
 

@@ -1,5 +1,5 @@
-﻿// Copyright © 2022-2023 Nikolay Melnikov. All rights reserved.
-// SPDX-License-Identifier: Apache-2.0
+﻿// SPDX-License-Identifier: Apache-2.0
+// © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
 
 using Depra.Stateful.Transitional;
 
@@ -10,14 +10,14 @@ public sealed class StateTransitionsTests
 	[Fact]
 	public void NeedTransition_ShouldReturnFalse_WhenNoTransitionsAdded()
 	{
-		// Arrange.
+		// Arrange:
 		var stateTransitions = new StateTransitions();
 		var initialState = Substitute.For<IState>();
 
-		// Act.
+		// Act:
 		var result = stateTransitions.NeedTransition(initialState, out var nextState);
 
-		// Assert.
+		// Assert:
 		result.Should().BeFalse();
 		nextState.Should().BeNull();
 	}
@@ -25,7 +25,7 @@ public sealed class StateTransitionsTests
 	[Fact]
 	public void NeedTransition_ShouldReturnTrueAndSetNextState_WhenTransitionFound()
 	{
-		// Arrange.
+		// Arrange:
 		var initialState = Substitute.For<IState>();
 		var expectedNextState = Substitute.For<IState>();
 		var transition = Substitute.For<IStateTransition>();
@@ -35,10 +35,10 @@ public sealed class StateTransitionsTests
 		var stateTransitions = new StateTransitions();
 		stateTransitions.Add(initialState, transition);
 
-		// Act.
+		// Act:
 		var result = stateTransitions.NeedTransition(initialState, out var actualNextState);
 
-		// Assert.
+		// Assert:
 		result.Should().BeTrue();
 		actualNextState.Should().Be(expectedNextState);
 	}
@@ -46,7 +46,7 @@ public sealed class StateTransitionsTests
 	[Fact]
 	public void NeedTransition_ShouldReturnFalse_WhenTransitionNotFound()
 	{
-		// Arrange.
+		// Arrange:
 		var stateTransitions = new StateTransitions();
 		var initialState = Substitute.For<IState>();
 		var nextState = Substitute.For<IState>();
@@ -55,10 +55,10 @@ public sealed class StateTransitionsTests
 		transition.NextState.Returns(nextState);
 		stateTransitions.Add(initialState, transition);
 
-		// Act.
+		// Act:
 		var result = stateTransitions.NeedTransition(initialState, out var toState);
 
-		// Assert.
+		// Assert:
 		result.Should().BeFalse();
 		toState.Should().BeNull();
 	}
@@ -66,14 +66,14 @@ public sealed class StateTransitionsTests
 	[Fact]
 	public void AddAny_ShouldAddTransition_ToAnyList()
 	{
-		// Arrange.
+		// Arrange:
 		var stateTransitions = new StateTransitions();
 		var transition = Substitute.For<IStateTransition>();
 
-		// Act.
+		// Act:
 		stateTransitions.AddAny(transition);
 
-		// Assert.
+		// Assert:
 		stateTransitions.NeedTransition(Substitute.For<IState>(), out _);
 		transition.Received(1).ShouldTransition();
 	}
@@ -81,15 +81,15 @@ public sealed class StateTransitionsTests
 	[Fact]
 	public void Add_ShouldAddTransition_ToSpecifiedStateList()
 	{
-		// Arrange.
+		// Arrange:
 		var stateTransitions = new StateTransitions();
 		var initialState = Substitute.For<IState>();
 		var transition = Substitute.For<IStateTransition>();
 
-		// Act.
+		// Act:
 		stateTransitions.Add(initialState, transition);
 
-		// Assert.
+		// Assert:
 		stateTransitions.NeedTransition(initialState, out _);
 		transition.Received(1).ShouldTransition();
 	}

@@ -1,6 +1,6 @@
 # Stateful
 
-<div align="center">
+<div>
     <strong><a href="README.md">English</a> | <a href="README.RU.md">Русский</a></strong>
 </div>
 
@@ -202,11 +202,11 @@ private void Update() => _transitionSystem.Tick();
 I am an independent developer,
 and most of the development on this project is done in my spare time.
 If you're interested in collaborating or hiring me for a project, check
-out [my portfolio](https://github.com/Depression-aggression) and [reach out](mailto:g0dzZz1lla@yandex.ru)!
+out [my portfolio](https://github.com/Depra-Inc) and [reach out](mailto:n.melnikov@depra.org)!
 
 ## License
 
 **Apache-2.0**
 
-Copyright (c) 2022-2023 Nikolay Melnikov
-[g0dzZz1lla@yandex.ru](mailto:g0dzZz1lla@yandex.ru)
+Copyright (c) 2022-2024 Nikolay Melnikov
+[n.melnikov@depra.org](mailto:n.melnikov@depra.org)

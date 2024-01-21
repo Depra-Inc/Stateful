@@ -192,13 +192,12 @@ private void Update() => _transitionSystem.Tick();
 Я независимый разработчик,
 и большая часть разработки этого проекта выполняется в свободное время.
 Если вы заинтересованы в сотрудничестве или найме меня для проекта,
-ознакомьтесь с моим [портфолио](https://github.com/Depression-aggression)
-и [свяжитесь со мной](mailto:g0dzZz1lla@yandex.ru)!
+ознакомьтесь с моим [портфолио](https://github.com/Depra-Inc)
+и [свяжитесь со мной](mailto:n.melnikov@depra.org)!
 
 ## Лицензия
 
 **Apache-2.0**
 
-Copyright (c) 2022-2023 Николай Мельников
-[g0dzZz1lla@yandex.ru](mailto:g0dzZz1lla@yandex.ru)
-
+Copyright (c) 2022-2024 Николай Мельников
+[n.melnikov@depra.org](mailto:n.melnikov@depra.org)

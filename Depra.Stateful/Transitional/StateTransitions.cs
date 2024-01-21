@@ -1,5 +1,5 @@
-﻿// Copyright © 2022-2023 Nikolay Melnikov. All rights reserved.
-// SPDX-License-Identifier: Apache-2.0
+﻿// SPDX-License-Identifier: Apache-2.0
+// © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
 
 using System.Collections.Generic;
 using Depra.Stateful.Abstract;
@@ -27,7 +27,7 @@ namespace Depra.Stateful.Transitional
 
 		public bool NeedTransition(IState from, out IState to)
 		{
-			var current = _all.TryGetValue(from, out var value) ? value : EMPTY;
+			var current = _all.GetValueOrDefault(from, EMPTY);
 			var totalTransitions = _any.Count + current.Count;
 			for (var index = 0; index < totalTransitions; index++)
 			{

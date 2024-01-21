@@ -1,5 +1,5 @@
-﻿// Copyright © 2022-2023 Nikolay Melnikov. All rights reserved.
-// SPDX-License-Identifier: Apache-2.0
+﻿// SPDX-License-Identifier: Apache-2.0
+// © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
 
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,7 @@ namespace Depra.Stateful.Transitional
 {
 	public static class StateTransitionsExtensions
 	{
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static IStateTransitions At(this IStateTransitions self, IState from, IState to,
 			params Func<bool>[] conditions)
 		{
@@ -17,16 +18,18 @@ namespace Depra.Stateful.Transitional
 			return self;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static IStateTransitions AnyAt(this IStateTransitions self, IState to, params Func<bool>[] conditions)
 		{
 			self.AddAny(new StateTransition(to, conditions));
 			return self;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static IStateTransitions RepeatAt(this IStateTransitions self, IState from, IState to, int count,
 			params Func<bool>[] conditions)
 		{
-			for (var i = 0; i < count; i++)
+			for (var index = 0; index < count; index++)
 			{
 				self.Add(from, new StateTransition(to, conditions));
 			}
@@ -34,10 +37,11 @@ namespace Depra.Stateful.Transitional
 			return self;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static IStateTransitions RepeatAtAny(this IStateTransitions self, IState to, int count,
 			params Func<bool>[] conditions)
 		{
-			for (var i = 0; i < count; i++)
+			for (var index = 0; index < count; index++)
 			{
 				self.AddAny(new StateTransition(to, conditions));
 			}
@@ -50,7 +54,7 @@ namespace Depra.Stateful.Transitional
 		{
 			foreach (var transition in self)
 			{
-				if (!transition.ShouldTransition())
+				if (transition.ShouldTransition() == false)
 				{
 					continue;
 				}

@@ -1,5 +1,5 @@
-﻿// Copyright © 2022-2023 Nikolay Melnikov. All rights reserved.
-// SPDX-License-Identifier: Apache-2.0
+﻿// SPDX-License-Identifier: Apache-2.0
+// © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
 
 using Depra.Stateful.Transitional;
 
@@ -10,24 +10,24 @@ public sealed class StatefulTransitionSystemTests
 	[Fact]
 	public void ChangeState_Should_UpdateCurrentState()
 	{
-		// Arrange.
+		// Arrange:
 		var newState = Substitute.For<IState>();
 		var stateMachine = Substitute.For<IStateMachine>();
 		stateMachine.CurrentState.Returns(newState);
 		var transitions = Substitute.For<IStateTransitions>();
 		IStateMachine transitionSystem = new StatefulTransitionSystem(stateMachine, transitions);
 
-		// Act.
+		// Act:
 		transitionSystem.SwitchState(to: newState);
 
-		// Assert.
+		// Assert:
 		transitionSystem.CurrentState.Should().BeEquivalentTo(newState);
 	}
 
 	[Fact]
 	public void Tick_WhenNeedTransition_Should_ChangeState()
 	{
-		// Arrange.
+		// Arrange:
 		IState capturedNextState = null!;
 		var stateMachine = Substitute.For<IStateMachine>();
 		var transitions = Substitute.For<IStateTransitions>();
@@ -35,53 +35,53 @@ public sealed class StatefulTransitionSystemTests
 		transitions.NeedTransition(stateMachine.CurrentState, out var nextState).ReturnsForAnyArgs(_ => true);
 		var transitionSystem = new StatefulTransitionSystem(stateMachine, transitions);
 
-		// Act.
+		// Act:
 		transitionSystem.Tick();
 
-		// Assert.
+		// Assert:
 		capturedNextState.Should().BeEquivalentTo(nextState);
 	}
 
 	[Fact]
 	public void Tick_WhenNoTransitionNeeded_Should_NotChangeState()
 	{
-		// Arrange.
+		// Arrange:
 		var stateMachine = Substitute.For<IStateMachine>();
 		var transitions = Substitute.For<IStateTransitions>();
 		var tickSystem = new StatefulTransitionSystem(stateMachine, transitions);
 
-		// Act.
+		// Act:
 		tickSystem.Tick();
 
-		// Assert.
+		// Assert:
 		stateMachine.DidNotReceive().SwitchState(to: Arg.Any<IState>());
 	}
 
 	[Fact]
 	public void Constructor_NullStateMachine_ThrowsArgumentNullException()
 	{
-		// Arrange.
+		// Arrange:
 		IStateMachine stateMachine = null!;
 		var transitions = Substitute.For<IStateTransitions>();
 
-		// Act.
+		// Act:
 		var act = () => new StatefulTransitionSystem(stateMachine, transitions);
 
-		// Assert.
+		// Assert:
 		act.Should().Throw<ArgumentNullException>();
 	}
 
 	[Fact]
 	public void Constructor_NullTransitionCoordinator_ThrowsArgumentNullException()
 	{
-		// Arrange.
+		// Arrange:
 		var stateMachine = Substitute.For<IStateMachine>();
 		IStateTransitions stateTransitions = null!;
 
-		// Act.
+		// Act:
 		var act = () => new StatefulTransitionSystem(stateMachine, stateTransitions);
 
-		// Assert.
+		// Assert:
 		act.Should().Throw<ArgumentNullException>();
 	}
 }
