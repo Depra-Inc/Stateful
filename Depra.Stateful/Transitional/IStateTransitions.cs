@@ -11,6 +11,10 @@ namespace Depra.Stateful.Transitional
 
 		void Add(IState from, IStateTransition transition);
 
+		void RemoveAny(IStateTransition transition);
+
+		void Remove(IState from, IStateTransition transition);
+
 		bool NeedTransition(IState from, out IState to);
 	}
 }

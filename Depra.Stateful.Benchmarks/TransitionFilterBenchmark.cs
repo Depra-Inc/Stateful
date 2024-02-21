@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: Apache-2.0
 // © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
 
+using System.Threading;
+using System.Threading.Tasks;
 using Depra.Stateful.Transitional;
 
 namespace Depra.Stateful.Benchmarks;
@@ -28,7 +30,9 @@ public class TransitionFilterBenchmark
 	private readonly record struct EmptyState : IState
 	{
 		void IState.Enter() { }
-
 		void IState.Exit() { }
+
+		Task IState.EnterAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+		Task IState.ExitAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 	}
 }

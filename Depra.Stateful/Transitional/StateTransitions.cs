@@ -13,18 +13,6 @@ namespace Depra.Stateful.Transitional
 		private readonly List<IStateTransition> _any = new();
 		private readonly Dictionary<IState, List<IStateTransition>> _all = new();
 
-		public void Add(IState from, IStateTransition transition)
-		{
-			if (_all.TryGetValue(from, out var transitions) == false)
-			{
-				_all[from] = transitions = EMPTY;
-			}
-
-			transitions.Add(transition);
-		}
-
-		public void AddAny(IStateTransition transition) => _any.Add(transition);
-
 		public bool NeedTransition(IState from, out IState to)
 		{
 			var current = _all.GetValueOrDefault(from, EMPTY);
@@ -44,5 +32,27 @@ namespace Depra.Stateful.Transitional
 			to = null;
 			return false;
 		}
+
+		public void Add(IState from, IStateTransition transition)
+		{
+			if (_all.TryGetValue(from, out var transitions) == false)
+			{
+				_all[from] = transitions = EMPTY;
+			}
+
+			transitions.Add(transition);
+		}
+
+		public void Remove(IState from, IStateTransition transition)
+		{
+			if (_all.TryGetValue(from, out var transitions))
+			{
+				transitions.Remove(transition);
+			}
+		}
+
+		public void AddAny(IStateTransition transition) => _any.Add(transition);
+
+		public void RemoveAny(IStateTransition transition) => _any.Remove(transition);
 	}
 }

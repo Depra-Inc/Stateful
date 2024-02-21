@@ -22,7 +22,6 @@ namespace Depra.Stateful.Transitional
 
 		public IState NextState { get; }
 
-		bool IStateTransition.ShouldTransition() =>
-			_conditions.All(condition => condition());
+		bool IStateTransition.ShouldTransition() => _conditions.All(condition => condition());
 	}
 }
