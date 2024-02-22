@@ -12,7 +12,9 @@ namespace Depra.Stateful.Finite
 
 		public event StateChangedDelegate StateChanged;
 
-		public StateMachine(bool allowReentry = false) => _allowReentry = allowReentry;
+		public StateMachine() : this(false) { }
+
+		public StateMachine(bool allowReentry) => _allowReentry = allowReentry;
 
 		public StateMachine(IState startingState, bool allowReentry = false) : this(allowReentry) =>
 			SwitchState(startingState);
