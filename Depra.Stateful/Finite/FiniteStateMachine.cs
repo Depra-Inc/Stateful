@@ -6,22 +6,22 @@ using Depra.Stateful.Abstract;
 
 namespace Depra.Stateful.Finite
 {
-	public sealed class StateMachine : IStateMachine
+	public sealed class FiniteStateMachine : IFiniteStateMachine
 	{
 		private readonly bool _allowReentry;
 
 		public event StateChangedDelegate StateChanged;
 
-		public StateMachine() : this(false) { }
+		public FiniteStateMachine() : this(false) { }
 
-		public StateMachine(bool allowReentry) => _allowReentry = allowReentry;
+		public FiniteStateMachine(bool allowReentry) => _allowReentry = allowReentry;
 
-		public StateMachine(IState startingState, bool allowReentry = false) : this(allowReentry) =>
+		public FiniteStateMachine(IFiniteState startingState, bool allowReentry = false) : this(allowReentry) =>
 			SwitchState(startingState);
 
-		public IState CurrentState { get; private set; }
+		public IFiniteState CurrentState { get; private set; }
 
-		public void SwitchState(IState to)
+		public void SwitchState(IFiniteState to)
 		{
 			if (CanEnterState(to) == false)
 			{

@@ -1,6 +1,7 @@
 ﻿// SPDX-License-Identifier: Apache-2.0
 // © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
 
+using Depra.Stateful.Finite;
 using Depra.Stateful.Transitional;
 
 namespace Depra.Stateful.UnitTests.Transition;
@@ -11,11 +12,11 @@ public sealed class StatefulTransitionSystemTests
 	public void ChangeState_Should_UpdateCurrentState()
 	{
 		// Arrange:
-		var newState = Substitute.For<IState>();
-		var stateMachine = Substitute.For<IStateMachine>();
+		var newState = Substitute.For<IFiniteState>();
+		var stateMachine = Substitute.For<IFiniteStateMachine>();
 		stateMachine.CurrentState.Returns(newState);
 		var transitions = Substitute.For<IStateTransitions>();
-		IStateMachine transitionSystem = new StatefulTransitionSystem(stateMachine, transitions);
+		IFiniteStateMachine transitionSystem = new StatefulTransitionSystem(stateMachine, transitions);
 
 		// Act:
 		transitionSystem.SwitchState(to: newState);
@@ -29,9 +30,9 @@ public sealed class StatefulTransitionSystemTests
 	{
 		// Arrange:
 		IState capturedNextState = null!;
-		var stateMachine = Substitute.For<IStateMachine>();
+		var stateMachine = Substitute.For<IFiniteStateMachine>();
 		var transitions = Substitute.For<IStateTransitions>();
-		stateMachine.SwitchState(Arg.Do<IState>(state => capturedNextState = state));
+		stateMachine.SwitchState(Arg.Do<IFiniteState>(state => capturedNextState = state));
 		transitions.NeedTransition(stateMachine.CurrentState, out var nextState).ReturnsForAnyArgs(_ => true);
 		var transitionSystem = new StatefulTransitionSystem(stateMachine, transitions);
 
@@ -46,7 +47,7 @@ public sealed class StatefulTransitionSystemTests
 	public void Tick_WhenNoTransitionNeeded_Should_NotChangeState()
 	{
 		// Arrange:
-		var stateMachine = Substitute.For<IStateMachine>();
+		var stateMachine = Substitute.For<IFiniteStateMachine>();
 		var transitions = Substitute.For<IStateTransitions>();
 		var tickSystem = new StatefulTransitionSystem(stateMachine, transitions);
 
@@ -54,14 +55,14 @@ public sealed class StatefulTransitionSystemTests
 		tickSystem.Tick();
 
 		// Assert:
-		stateMachine.DidNotReceive().SwitchState(to: Arg.Any<IState>());
+		stateMachine.DidNotReceive().SwitchState(to: Arg.Any<IFiniteState>());
 	}
 
 	[Fact]
 	public void Constructor_NullStateMachine_ThrowsArgumentNullException()
 	{
 		// Arrange:
-		IStateMachine stateMachine = null!;
+		IFiniteStateMachine stateMachine = null!;
 		var transitions = Substitute.For<IStateTransitions>();
 
 		// Act:
@@ -75,7 +76,7 @@ public sealed class StatefulTransitionSystemTests
 	public void Constructor_NullTransitionCoordinator_ThrowsArgumentNullException()
 	{
 		// Arrange:
-		var stateMachine = Substitute.For<IStateMachine>();
+		var stateMachine = Substitute.For<IFiniteStateMachine>();
 		IStateTransitions stateTransitions = null!;
 
 		// Act:

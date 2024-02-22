@@ -19,10 +19,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Hierarchical"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <None Include="..\LICENSE" Pack="true" PackagePath="\"/>
     </ItemGroup>
 

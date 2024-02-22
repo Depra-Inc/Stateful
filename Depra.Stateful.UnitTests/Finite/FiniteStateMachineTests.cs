@@ -5,14 +5,14 @@ using Depra.Stateful.Finite;
 
 namespace Depra.Stateful.UnitTests.Finite;
 
-public sealed class StateMachineTests
+public sealed class FiniteStateMachineTests
 {
     [Fact]
     public void AutoTransitionOnStart_SetsCurrentState()
     {
         // Arrange:
-        var startState = Substitute.For<IState>();
-        var stateMachine = new StateMachine(startState);
+        var startState = Substitute.For<IFiniteState>();
+        var stateMachine = new FiniteStateMachine(startState);
 
         // Act - No action needed.
 
@@ -24,27 +24,27 @@ public sealed class StateMachineTests
     public void ChangeState_SetsCurrentState()
     {
         // Arrange:
-        var newState = Substitute.For<IState>();
-        var stateMachine = new StateMachine();
+        var nextState = Substitute.For<IFiniteState>();
+        var stateMachine = new FiniteStateMachine();
 
         // Act:
-        stateMachine.SwitchState(to: newState);
+        stateMachine.SwitchState(to: nextState);
 
         // Assert:
-        stateMachine.CurrentState.Should().BeEquivalentTo(newState);
+        stateMachine.CurrentState.Should().BeEquivalentTo(nextState);
     }
 
     [Fact]
     public void ChangeState_InvokesStateChangedEvent()
     {
         // Arrange:
-        var newState = Substitute.For<IState>();
+        var nextState = Substitute.For<IFiniteState>();
         var stateChangedEventInvoked = false;
-        var stateMachine = new StateMachine();
+        var stateMachine = new FiniteStateMachine();
         stateMachine.StateChanged += _ => { stateChangedEventInvoked = true; };
 
         // Act:
-        stateMachine.SwitchState(to: newState);
+        stateMachine.SwitchState(to: nextState);
 
         // Assert:
         stateChangedEventInvoked.Should().BeTrue();

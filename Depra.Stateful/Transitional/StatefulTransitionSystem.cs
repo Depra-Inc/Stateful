@@ -3,36 +3,37 @@
 
 using System;
 using Depra.Stateful.Abstract;
+using Depra.Stateful.Finite;
 
 namespace Depra.Stateful.Transitional
 {
-	public sealed class StatefulTransitionSystem : IStateMachine
+	public sealed class StatefulTransitionSystem : IFiniteStateMachine
 	{
-		private readonly IStateMachine _machine;
+		private readonly IFiniteStateMachine _machine;
 		private readonly IStateTransitions _transitions;
 
-		public event StateChangedDelegate StateChanged
+		event StateChangedDelegate IStateMachine<IFiniteState>.StateChanged
 		{
 			add => _machine.StateChanged += value;
 			remove => _machine.StateChanged -= value;
 		}
 
-		public StatefulTransitionSystem(IStateMachine machine, IStateTransitions transitions)
+		public StatefulTransitionSystem(IFiniteStateMachine machine, IStateTransitions transitions)
 		{
 			_machine = machine ?? throw new ArgumentNullException(nameof(machine));
 			_transitions = transitions ?? throw new ArgumentNullException(nameof(transitions));
 		}
 
-		public IState CurrentState => _machine.CurrentState;
+		public IFiniteState CurrentState => _machine.CurrentState;
 
 		public void Tick()
 		{
 			if (_transitions.NeedTransition(CurrentState, out var nextState))
 			{
-				SwitchState(nextState);
+				SwitchState((IFiniteState) nextState);
 			}
 		}
 
-		public void SwitchState(IState to) => _machine.SwitchState(to);
+		public void SwitchState(IFiniteState to) => _machine.SwitchState(to);
 	}
 }
