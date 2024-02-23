@@ -6,21 +6,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using Depra.Stateful.Abstract;
 
-namespace Depra.Stateful.Hierarchical
+namespace Depra.Stateful.Background
 {
-	public sealed class HierarchicalStateMachine : IHierarchicalStateMachine
+	public sealed class BackgroundStateMachine : IBackgroundStateMachine
 	{
 		private readonly bool _allowReentry;
 
 		public event StateChangedDelegate StateChanged;
 
-		public HierarchicalStateMachine() : this(false) { }
+		public BackgroundStateMachine() : this(false) { }
 
-		public HierarchicalStateMachine(bool allowReentry) => _allowReentry = allowReentry;
+		public BackgroundStateMachine(bool allowReentry) => _allowReentry = allowReentry;
 
-		public IStateNode CurrentState { get; private set; }
+		public IBackgroundState CurrentState { get; private set; }
 
-		public async Task SwitchState(IStateNode to, CancellationToken cancellationToken = default)
+		public async Task SwitchState(IBackgroundState to, CancellationToken cancellationToken = default)
 		{
 			if (CanEnterState(to) == false)
 			{
@@ -41,6 +41,6 @@ namespace Depra.Stateful.Hierarchical
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private bool CanEnterState(IStateNode state) => _allowReentry || CurrentState != state;
+		private bool CanEnterState(IBackgroundState state) => _allowReentry || CurrentState != state;
 	}
 }

@@ -5,10 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Depra.Stateful.Abstract;
 
-namespace Depra.Stateful.Hierarchical
+namespace Depra.Stateful.Background
 {
-	public interface IHierarchicalStateMachine : IStateMachine<IStateNode>
+	public interface IBackgroundState : IState
 	{
-		Task SwitchState(IStateNode to, CancellationToken cancellationToken = default);
+		Task Enter(CancellationToken cancellationToken);
+
+		Task Exit(CancellationToken cancellationToken);
 	}
 }

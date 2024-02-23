@@ -1,19 +1,19 @@
 ﻿// SPDX-License-Identifier: Apache-2.0
 // © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
 
-using Depra.Stateful.Hierarchical;
+using Depra.Stateful.Background;
 
 
-namespace Depra.Stateful.UnitTests.Hierarchical;
+namespace Depra.Stateful.UnitTests.Background;
 
-public sealed class HierarchicalStateMachineTests
+public sealed class BackgroundStateMachineTests
 {
 	[Fact]
 	public async Task ChangeState_SetsCurrentState()
 	{
 		// Arrange:
-		var nextState = Substitute.For<IStateNode>();
-		var stateMachine = new HierarchicalStateMachine();
+		var nextState = Substitute.For<IBackgroundState>();
+		var stateMachine = new BackgroundStateMachine();
 
 		// Act:
 		await stateMachine.SwitchState(to: nextState);
@@ -26,9 +26,9 @@ public sealed class HierarchicalStateMachineTests
 	public async Task ChangeState_InvokesStateChangedEvent()
 	{
 		// Arrange:
-		var nextState = Substitute.For<IStateNode>();
+		var nextState = Substitute.For<IBackgroundState>();
 		var stateChangedEventInvoked = false;
-		var stateMachine = new HierarchicalStateMachine();
+		var stateMachine = new BackgroundStateMachine();
 		stateMachine.StateChanged += _ => { stateChangedEventInvoked = true; };
 
 		// Act:
