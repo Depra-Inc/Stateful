@@ -14,7 +14,7 @@ namespace Depra.Stateful.Registry
 
 		public bool IsRegistered(Type type) => _states.ContainsKey(type);
 
-		public IState Get(Type type) => _states.TryGetValue(type, out var state) ? state : new NullState();
+		public IState Get(Type type) => _states.TryGetValue(type, out var state) ? state : new NullFiniteState();
 
 		public bool TryGet(Type type, out IState state)
 		{
@@ -24,7 +24,7 @@ namespace Depra.Stateful.Registry
 				return true;
 			}
 
-			state = new NullState();
+			state = new NullFiniteState();
 			return false;
 		}
 
