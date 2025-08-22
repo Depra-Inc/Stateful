@@ -32,5 +32,9 @@ namespace Depra.Stateful.Registry
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Register<TState>(this StateRegistry self, TState state) where TState : IState =>
 			self.Register(typeof(TState), state);
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void Unregister<TState>(this StateRegistry self) where TState : IState =>
+			self.Unregister(typeof(TState));
 	}
 }

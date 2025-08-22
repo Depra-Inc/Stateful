@@ -4,28 +4,27 @@
 using System;
 using System.Collections.Generic;
 using Depra.Stateful.Abstract;
+using Depra.Stateful.Finite;
 
 namespace Depra.Stateful.Registry
 {
 	public sealed class StateRegistry
 	{
-		private readonly Dictionary<Type, object> _states = new();
+		private readonly Dictionary<Type, IState> _states = new();
 
 		public bool IsRegistered(Type type) => _states.ContainsKey(type);
 
-		public IState Get(Type type) => _states.TryGetValue(type, out var state)
-			? (IState)state
-			: throw new KeyNotFoundException($"State of type {type} is not registered.");
+		public IState Get(Type type) => _states.TryGetValue(type, out var state) ? state : new NullState();
 
 		public bool TryGet(Type type, out IState state)
 		{
 			if (_states.TryGetValue(type, out var obj))
 			{
-				state = (IState)obj;
+				state = obj;
 				return true;
 			}
 
-			state = null;
+			state = new NullState();
 			return false;
 		}
 
@@ -38,5 +37,7 @@ namespace Depra.Stateful.Registry
 				throw new InvalidOperationException($"State of type {type} is already registered.");
 			}
 		}
+
+		public void Unregister(Type type) => _states.Remove(type);
 	}
 }
