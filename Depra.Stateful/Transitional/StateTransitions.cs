@@ -1,5 +1,5 @@
 ﻿// SPDX-License-Identifier: Apache-2.0
-// © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
+// © 2022-2025 Depra <n.melnikov@depra.org>
 
 using System.Collections.Generic;
 using Depra.Stateful.Abstract;
@@ -20,7 +20,7 @@ namespace Depra.Stateful.Transitional
 			for (var index = 0; index < totalTransitions; index++)
 			{
 				var transition = index < _any.Count ? _any[index] : current[index - _any.Count];
-				if (transition.ShouldTransition() == false)
+				if (!transition.ShouldTransition())
 				{
 					continue;
 				}
@@ -35,7 +35,7 @@ namespace Depra.Stateful.Transitional
 
 		public void Add(IState from, IStateTransition transition)
 		{
-			if (_all.TryGetValue(from, out var transitions) == false)
+			if (!_all.TryGetValue(from, out var transitions))
 			{
 				_all[from] = transitions = EMPTY;
 			}

@@ -1,5 +1,5 @@
 ﻿// SPDX-License-Identifier: Apache-2.0
-// © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
+// © 2022-2025 Depra <n.melnikov@depra.org>
 
 using System;
 using System.Collections.Generic;
@@ -54,7 +54,7 @@ namespace Depra.Stateful.Transitional
 		{
 			foreach (var transition in self)
 			{
-				if (transition.ShouldTransition() == false)
+				if (!transition.ShouldTransition())
 				{
 					continue;
 				}
@@ -63,7 +63,7 @@ namespace Depra.Stateful.Transitional
 				return true;
 			}
 
-			to = default;
+			to = null;
 			return false;
 		}
 	}

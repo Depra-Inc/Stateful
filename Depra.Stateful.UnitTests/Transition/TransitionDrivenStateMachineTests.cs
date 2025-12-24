@@ -6,7 +6,7 @@ using Depra.Stateful.Transitional;
 
 namespace Depra.Stateful.UnitTests.Transition;
 
-public sealed class StatefulTransitionSystemTests
+public sealed class TransitionDrivenStateMachineTests
 {
 	[Fact]
 	public void ChangeState_Should_UpdateCurrentState()
@@ -16,7 +16,7 @@ public sealed class StatefulTransitionSystemTests
 		var stateMachine = Substitute.For<IFiniteStateMachine>();
 		stateMachine.CurrentState.Returns(newState);
 		var transitions = Substitute.For<IStateTransitions>();
-		IFiniteStateMachine transitionSystem = new StatefulTransitionSystem(stateMachine, transitions);
+		IFiniteStateMachine transitionSystem = new TransitionDrivenStateMachine(stateMachine, transitions);
 
 		// Act:
 		transitionSystem.SwitchState(to: newState);
@@ -34,7 +34,7 @@ public sealed class StatefulTransitionSystemTests
 		var transitions = Substitute.For<IStateTransitions>();
 		stateMachine.SwitchState(Arg.Do<IFiniteState>(state => capturedNextState = state));
 		transitions.NeedTransition(stateMachine.CurrentState, out var nextState).ReturnsForAnyArgs(_ => true);
-		var transitionSystem = new StatefulTransitionSystem(stateMachine, transitions);
+		var transitionSystem = new TransitionDrivenStateMachine(stateMachine, transitions);
 
 		// Act:
 		transitionSystem.Tick();
@@ -49,7 +49,7 @@ public sealed class StatefulTransitionSystemTests
 		// Arrange:
 		var stateMachine = Substitute.For<IFiniteStateMachine>();
 		var transitions = Substitute.For<IStateTransitions>();
-		var tickSystem = new StatefulTransitionSystem(stateMachine, transitions);
+		var tickSystem = new TransitionDrivenStateMachine(stateMachine, transitions);
 
 		// Act:
 		tickSystem.Tick();
@@ -66,7 +66,7 @@ public sealed class StatefulTransitionSystemTests
 		var transitions = Substitute.For<IStateTransitions>();
 
 		// Act:
-		var act = () => new StatefulTransitionSystem(stateMachine, transitions);
+		var act = () => new TransitionDrivenStateMachine(stateMachine, transitions);
 
 		// Assert:
 		act.Should().Throw<ArgumentNullException>();
@@ -80,7 +80,7 @@ public sealed class StatefulTransitionSystemTests
 		IStateTransitions stateTransitions = null!;
 
 		// Act:
-		var act = () => new StatefulTransitionSystem(stateMachine, stateTransitions);
+		var act = () => new TransitionDrivenStateMachine(stateMachine, stateTransitions);
 
 		// Assert:
 		act.Should().Throw<ArgumentNullException>();

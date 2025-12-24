@@ -12,6 +12,16 @@ namespace Depra.Stateful.Registry
 	{
 		private readonly Dictionary<Type, IState> _states = new();
 
+		public StateRegistry() => _states = new Dictionary<Type, IState>();
+
+		public StateRegistry(IEnumerable<IState> states)
+		{
+			foreach (var state in states)
+			{
+				Register(state);
+			}
+		}
+
 		public bool IsRegistered(Type type) => _states.ContainsKey(type);
 
 		public IState Get(Type type) => _states.TryGetValue(type, out var state) ? state : new NullFiniteState();

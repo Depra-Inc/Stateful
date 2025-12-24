@@ -12,7 +12,7 @@ namespace Depra.Stateful.Transitional
 		public static Func<bool>[] Flatten(this ITransitionCondition[] conditions)
 		{
 			var result = new Func<bool>[conditions.Length];
-			for (var index = 0; index < conditions.Length; index++)
+			for (int index = 0, length = conditions.Length; index < length; index++)
 			{
 				result[index] = conditions[index].IsMet;
 			}

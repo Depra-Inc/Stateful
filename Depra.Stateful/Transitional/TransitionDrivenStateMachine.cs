@@ -1,5 +1,5 @@
 ﻿// SPDX-License-Identifier: Apache-2.0
-// © 2022-2024 Nikolay Melnikov <n.melnikov@depra.org>
+// © 2022-2025 Depra <n.melnikov@depra.org>
 
 using System;
 using Depra.Stateful.Abstract;
@@ -7,7 +7,7 @@ using Depra.Stateful.Finite;
 
 namespace Depra.Stateful.Transitional
 {
-	public sealed class StatefulTransitionSystem : IFiniteStateMachine
+	public sealed class TransitionDrivenStateMachine : IFiniteStateMachine
 	{
 		private readonly IFiniteStateMachine _machine;
 		private readonly IStateTransitions _transitions;
@@ -18,7 +18,7 @@ namespace Depra.Stateful.Transitional
 			remove => _machine.StateChanged -= value;
 		}
 
-		public StatefulTransitionSystem(IFiniteStateMachine machine, IStateTransitions transitions)
+		public TransitionDrivenStateMachine(IFiniteStateMachine machine, IStateTransitions transitions)
 		{
 			_machine = machine ?? throw new ArgumentNullException(nameof(machine));
 			_transitions = transitions ?? throw new ArgumentNullException(nameof(transitions));
