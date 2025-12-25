@@ -8,18 +8,20 @@ namespace Depra.Stateful.Transitional
 {
 	public sealed class StateTransitions : IStateTransitions
 	{
-		private static readonly List<IStateTransition> EMPTY = new();
-
 		private readonly List<IStateTransition> _any = new();
 		private readonly Dictionary<IState, List<IStateTransition>> _all = new();
 
 		public bool NeedTransition(IState from, out IState to)
 		{
-			var current = _all.GetValueOrDefault(from, EMPTY);
-			var totalTransitions = _any.Count + current.Count;
+			if (!_all.TryGetValue(from, out var all))
+			{
+				_all[from] = all = new List<IStateTransition>();
+			}
+
+			var totalTransitions = _any.Count + all.Count;
 			for (var index = 0; index < totalTransitions; index++)
 			{
-				var transition = index < _any.Count ? _any[index] : current[index - _any.Count];
+				var transition = index < _any.Count ? _any[index] : all[index - _any.Count];
 				if (!transition.ShouldTransition())
 				{
 					continue;
@@ -37,7 +39,7 @@ namespace Depra.Stateful.Transitional
 		{
 			if (!_all.TryGetValue(from, out var transitions))
 			{
-				_all[from] = transitions = EMPTY;
+				_all[from] = transitions = new List<IStateTransition>();
 			}
 
 			transitions.Add(transition);
